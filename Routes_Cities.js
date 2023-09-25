@@ -1,0 +1,7 @@
+const express=require('express');
+const router=express.Router();
+const Controller=require('./Cities_routes');
+router.get('/add_route',Controller.add_route);
+router.get('/get_route',Controller.get_route);
+router.get('/delete_route',Controller.delete_route);
+module.exports=router;
