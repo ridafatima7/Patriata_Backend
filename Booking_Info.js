@@ -44,25 +44,20 @@ async function delete_booking(req,res)
 }
 async function update_booking(req, res)
  {
-    const {booking_id,validate } = req.query;
-    const parsedId = parseInt(booking_id); 
-    // const parsedCnic = parseInt(customerCnic);
-    const parsedvalidate = parseInt(validate); 
-      const updateQuery = 'UPDATE bookings_basic_info SET validate=? WHERE booking_id = ?';
-      connection.query(
-        updateQuery,
-        [parsedId,parsedvalidate],
-        (updateError, updateResults) => {
-          if (updateError) 
-          {
-            console.error('Error updating data: ' + updateError.message);
-            res.status(500).send('Error updating data');
-            return;
-          }
-          res.send(updateResults);
-        }
-      );
-   
+    const { booking_id, customerName} = req.query;
+    const updateQuery = 'UPDATE bookings_basic_info SET customerName=? WHERE booking_id = ?';
+    connection.query(
+    updateQuery,
+    [customerName, booking_id], 
+    (updateError, updateResults) => {
+    if (updateError) {
+      console.error('Error updating data: ' + updateError.message);
+      res.status(500).send('Error updating data');
+      return;
+    }
+    res.send(updateResults);
   }
+);
+}
 
 module.exports={get_bookings,add_booking,delete_booking,update_booking}
