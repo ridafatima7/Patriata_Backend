@@ -33,12 +33,13 @@ const CitiesRouter=require('./Routes')
 const routes_Router=require('./Routes_Cities')
 const timings_Router=require('./Routes_timings')
 const prices_Router=require('./Routes_prices')
-
+const bookings_Router=require('./Routes_booking')
 app.use(cors());
 app.use('/cities',CitiesRouter);
 app.use('/routes',routes_Router);
 app.use('/timings',timings_Router);
 app.use('/prices',prices_Router);
+app.use('/bookings',bookings_Router);
 const port = process.env.PORT || 4001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
