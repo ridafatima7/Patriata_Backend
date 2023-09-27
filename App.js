@@ -9,28 +9,7 @@ try {
    catch (error) {
     console.error('Express.js is not installed.');
    }
-// const myserver=http.createServer((req,res)=>{
-//   res.setHeader('Content-Type', 'text/plain');
-//   const log='${Date.now()}:${req.url}New Request Received\n';
-//   fs.appendFile('log.txt',log,(err,data)=>{
-//     switch(req.url){
-//       case '/':
-//       res.writeHead(200);
-//       res.end('Homepage');
-//       break
- 
-//       case '/about':
-//       res.writeHead(200);
-//       res.end('i am rida fatima');
-//       break
-//       default:
-//         res.writeHead(404);
-//       res.end('404 Not Found');
-//     }
-//   })
- 
-// });
-// myserver.listen(8007,()=> console.log('Server started'));
+
 const app = express();
 const cors = require('cors');
 // const jwt = require('jsonwebtoken');
@@ -44,20 +23,23 @@ const dbConfig = {
   const connection = mysql.createConnection(dbConfig);
   module.exports = connection;
   connection.connect(function(err) {
-    if (err) {
+    if (err) 
+    {
       return console.error('error: ' + err.message);
     }
     console.log('Connected to the MySQL server.');
 });
 const CitiesRouter=require('./Routes')
 const routes_Router=require('./Routes_Cities')
+const timings_Router=require('./Routes_timings')
+const prices_Router=require('./Routes_prices')
+
 app.use(cors());
-// app.use(function(req, res, next) {
-//   next(createError(404));
-// });
 app.use('/cities',CitiesRouter);
 app.use('/routes',routes_Router);
-const port = process.env.PORT || 4000;
+app.use('/timings',timings_Router);
+app.use('/prices',prices_Router);
+const port = process.env.PORT || 4001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

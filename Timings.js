@@ -1,9 +1,9 @@
 const e = require("express");
 const mysql = require('mysql');
 const connection = require('./App');
-async function get_route(req,res)
+async function get_timings(req,res)
 {
-    const query = 'SELECT name, id FROM cities';
+    const query = 'SELECT * FROM timings';
     connection.query(query, (error, results) => {
       if (error) {
         console.error('Error executing query: ' + error.message);
@@ -13,24 +13,22 @@ async function get_route(req,res)
         res.json(results);
     });
 }
-async function add_route(req, res) {
+async function add_timings(req, res) {
 
-    const { id, cityId, name, days, image,address, phone, terminal,is_schedule,date_from,date_to } = req.query;
-    const checkQuery = 'SELECT * FROM cities WHERE name = ?  AND id = ?';
-    connection.query(checkQuery, [name, cityId], (checkError, checkResults) => {
+    const { id, routeId,places,time_from,time_to } = req.query;
+    const checkQuery = 'SELECT * FROM routes WHERE id = ?';
+    connection.query(checkQuery, [routeId], (checkError, checkResults) => {
     if (checkError) {
         console.error('Error checking data: ' + checkError.message);
         res.status(500).send('Error checking data');
         return;
     }
       if (checkResults.length === 0) {
-        // No matching data found in 'cities' table, proceed with the insert
-       res.status(400).send('No data found  in the "cities" table');
+       res.status(400).send('No data found  in the "routes" table');
 
       } else {
-        // Matching data found in 'cities' table, handle accordingly
-        const insertQuery = 'INSERT INTO routes (id, cityId, name, days,image, address, phone, terminal,is_schedule,date_from,date_to) VALUES (?, ?, ?, ?, ?, ?, ?,?,0,0,0)';
-        connection.query(insertQuery, [id, cityId, name, days, image,address, phone, terminal,is_schedule,date_from,date_to], (insertError, insertResults) => {
+        const insertQuery = 'INSERT INTO timings ( id, routeId,places,time_from,time_to) VALUES (?, ?, ?, ?, ?)';
+        connection.query(insertQuery, [ id, routeId,places,time_from,time_to], (insertError, insertResults) => {
           if (insertError) {
             console.error('Error executing insert query: ' + insertError.message);
             res.status(500).send('Error adding data');
@@ -41,10 +39,10 @@ async function add_route(req, res) {
       }
     });
 }
-async function delete_route(req,res)
+async function delete_timings(req,res)
 {
     const { id } = req.query;
-    const query = 'DELETE FROM routes WHERE  id = ?';
+    const query = 'DELETE FROM timings WHERE  id = ?';
     connection.query(query, [id], (error, results) => 
     {
         if (error) 
@@ -57,14 +55,14 @@ async function delete_route(req,res)
     });
 
 } 
-async function update_route(req, res)
+async function update_timings(req, res)
  {
-    const {cityId, name, days, image, address, phone, terminal, is_schedule, date_from, date_to,id } = req.query;
+    const {id, routeId,places,time_from,time_to  } = req.query;
       
-      const updateQuery = 'UPDATE routes SET cityId=?, name=?, days=?, image=?, address=?, phone=?, terminal=?, is_schedule=?,date_from=?, date_to=? WHERE id = ?';
+      const updateQuery = 'UPDATE timings SET routeId=?,  places=? ,time_from=?, time_to=? WHERE id = ?';
       connection.query(
         updateQuery,
-        [cityId, name, days, image, address, phone, terminal, is_schedule, date_from, date_to,id],
+        [id, routeId,places,time_from,time_to],
         (updateError, updateResults) => {
           if (updateError) 
           {
@@ -78,4 +76,4 @@ async function update_route(req, res)
    
   }
 
-module.exports={get_route,add_route,delete_route,update_route}
+module.exports={get_timings,add_timings,delete_timings,update_timings}
